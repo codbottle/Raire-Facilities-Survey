@@ -1,0 +1,185 @@
+{
+  "form_id": "room-inspection-v1",
+  "name": "Room Inspection V1",
+  "mode": "hybrid",
+  "description": "Mobile-first hybrid room inspection form for Raire Facilities Survey.",
+  "scoring": {
+    "4": "excellent",
+    "3": "good",
+    "2": "fair",
+    "1": "poor",
+    "0": "failed"
+  },
+  "sections": [
+    {
+      "id": "inspection_header",
+      "label": "Inspection Header",
+      "default_collapsed": false,
+      "fields": [
+        { "key": "property_id", "label": "Property", "type": "relation", "target": "properties", "required": true },
+        { "key": "building_id", "label": "Building", "type": "relation", "target": "buildings", "required": false },
+        { "key": "room_id", "label": "Room", "type": "relation", "target": "rooms", "required": true },
+        { "key": "inspector_name", "label": "Inspector", "type": "text", "required": true },
+        { "key": "inspection_date", "label": "Inspection Date", "type": "datetime", "required": true, "default": "now" },
+        { "key": "occupied", "label": "Occupied", "type": "boolean", "required": true, "default": false },
+        { "key": "out_of_service", "label": "Out of Service", "type": "boolean", "required": true, "default": false },
+        { "key": "room_ready", "label": "Room Ready", "type": "boolean", "required": true, "default": false },
+        { "key": "immediate_repair_required", "label": "Immediate Repair Required", "type": "boolean", "required": true, "default": false },
+        { "key": "priority", "label": "Priority", "type": "select", "required": true, "options": ["critical", "high", "medium", "low", "monitor"], "default": "medium" },
+        { "key": "notes", "label": "General Notes", "type": "textarea", "required": false }
+      ]
+    },
+    {
+      "id": "quick_room_condition",
+      "label": "Quick Room Condition",
+      "default_collapsed": false,
+      "fields": [
+        { "key": "entry_door_condition", "label": "Entry Door", "type": "score", "required": false },
+        { "key": "weatherstripping_condition", "label": "Weatherstripping", "type": "score", "required": false },
+        { "key": "lockset_condition", "label": "Lockset", "type": "score", "required": false },
+        { "key": "door_closer_working", "label": "Door Closer Working", "type": "boolean", "required": false },
+        { "key": "wall_condition", "label": "Walls", "type": "score", "required": false },
+        { "key": "wall_scuffs", "label": "Wall Scuffs", "type": "select", "options": ["none", "minor", "major"], "required": false },
+        { "key": "drywall_damage", "label": "Drywall Damage", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "WALL-003" }] },
+        { "key": "wall_water_damage", "label": "Wall Water Damage", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "WALL-004" }] },
+        { "key": "paint_needed", "label": "Paint Needed", "type": "select", "options": ["no", "spot", "full"], "required": false, "suggests": [{ "when": "spot", "code": "WALL-001" }, { "when": "full", "code": "WALL-002" }] },
+        { "key": "ceiling_condition", "label": "Ceiling", "type": "score", "required": false },
+        { "key": "ceiling_water_stains", "label": "Ceiling Water Stains", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "CEIL-001" }] },
+        { "key": "ceiling_sagging", "label": "Ceiling Sagging", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "CEIL-002" }] },
+        { "key": "floor_type", "label": "Floor Type", "type": "select", "options": ["carpet", "lvp", "tile", "other"], "required": false },
+        { "key": "floor_condition", "label": "Floor", "type": "score", "required": false },
+        { "key": "floor_water_damage", "label": "Floor Water Damage", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "FLR-003" }] },
+        { "key": "floor_soft_spots", "label": "Soft Spots", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "FLR-002" }] },
+        { "key": "floor_trip_hazard", "label": "Trip Hazard", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "FLR-004" }] },
+        { "key": "mirror_condition", "label": "Mirror", "type": "score", "required": false },
+        { "key": "mirror_cracked", "label": "Mirror Cracked", "type": "boolean", "required": false },
+        { "key": "mirror_loose", "label": "Mirror Loose", "type": "boolean", "required": false },
+        { "key": "window_glass_condition", "label": "Window Glass", "type": "score", "required": false },
+        { "key": "screen_condition", "label": "Screen", "type": "select", "options": ["good", "damaged", "missing"], "required": false, "suggests": [{ "when": "damaged", "code": "WIN-001" }, { "when": "missing", "code": "WIN-002" }] },
+        { "key": "window_lock_working", "label": "Window Lock Working", "type": "boolean", "required": false, "suggests": [{ "when": false, "code": "WIN-003" }] },
+        { "key": "window_caulking_condition", "label": "Window Caulking", "type": "score", "required": false },
+        { "key": "window_water_intrusion", "label": "Window Water Intrusion", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "WIN-005" }] }
+      ]
+    },
+    {
+      "id": "ptac_quick",
+      "label": "PTAC Quick Check",
+      "default_collapsed": false,
+      "fields": [
+        { "key": "ptac_present", "label": "PTAC Present", "type": "boolean", "required": false, "default": true },
+        { "key": "ptac_ac_works", "label": "AC Works", "type": "boolean", "required": false, "suggests": [{ "when": false, "code": "PTAC-003" }] },
+        { "key": "ptac_heat_works", "label": "Heat Works", "type": "boolean", "required": false, "suggests": [{ "when": false, "code": "PTAC-004" }] },
+        { "key": "ptac_dry_mode_works", "label": "Dry Mode Works", "type": "select", "options": ["yes", "no", "unknown"], "required": false },
+        { "key": "ptac_fan_works", "label": "Fan Works", "type": "boolean", "required": false, "suggests": [{ "when": false, "code": "PTAC-005" }] },
+        { "key": "ptac_noise", "label": "Noise", "type": "select", "options": ["normal", "excessive"], "required": false, "suggests": [{ "when": "excessive", "code": "PTAC-006" }] },
+        { "key": "ptac_filter_condition", "label": "Filter", "type": "select", "options": ["clean", "dirty", "missing"], "required": false, "suggests": [{ "when": "dirty", "code": "PTAC-001" }, { "when": "missing", "code": "PTAC-001" }] },
+        { "key": "ptac_coils_need_cleaning", "label": "Coils Need Cleaning", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "PTAC-002" }] },
+        { "key": "ptac_condensate_drain", "label": "Condensate Drain", "type": "select", "options": ["clear", "restricted", "unknown"], "required": false, "suggests": [{ "when": "restricted", "code": "PTAC-007" }] },
+        { "key": "ptac_water_intrusion", "label": "Water Intrusion Around PTAC", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "PTAC-008" }] }
+      ]
+    },
+    {
+      "id": "ptac_expanded",
+      "label": "PTAC Expanded Asset Details",
+      "default_collapsed": true,
+      "creates_asset_type": "ptac",
+      "fields": [
+        { "key": "ptac_manufacturer", "label": "Manufacturer", "type": "text", "required": false },
+        { "key": "ptac_model", "label": "Model", "type": "text", "required": false },
+        { "key": "ptac_serial", "label": "Serial", "type": "text", "required": false },
+        { "key": "ptac_voltage", "label": "Voltage", "type": "text", "required": false },
+        { "key": "ptac_btu", "label": "BTU", "type": "text", "required": false },
+        { "key": "ptac_drain_pan_condition", "label": "Drain Pan", "type": "score", "required": false },
+        { "key": "ptac_sleeve_condition", "label": "Sleeve", "type": "score", "required": false },
+        { "key": "ptac_interior_seal_condition", "label": "Interior Seal", "type": "score", "required": false },
+        { "key": "ptac_exterior_seal_condition", "label": "Exterior Seal", "type": "score", "required": false },
+        { "key": "ptac_wall_penetration_sealed", "label": "Wall Penetration Sealed", "type": "boolean", "required": false },
+        { "key": "ptac_floor_damage_around_unit", "label": "Floor Damage Around Unit", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "PTAC-010" }] },
+        { "key": "ptac_wall_damage_around_unit", "label": "Wall Damage Around Unit", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "PTAC-009" }] },
+        { "key": "ptac_recommended_action", "label": "Recommended Action", "type": "select", "options": ["clean", "service", "repair", "replace", "monitor"], "required": false }
+      ]
+    },
+    {
+      "id": "bathroom_quick",
+      "label": "Bathroom Quick Check",
+      "default_collapsed": false,
+      "fields": [
+        { "key": "bathroom_overall_condition", "label": "Bathroom Overall", "type": "score", "required": false },
+        { "key": "tub_shower_condition", "label": "Tub/Shower", "type": "score", "required": false },
+        { "key": "tile_condition", "label": "Tile", "type": "score", "required": false },
+        { "key": "grout_condition", "label": "Grout", "type": "score", "required": false },
+        { "key": "shower_caulk_condition", "label": "Shower Caulk", "type": "score", "required": false },
+        { "key": "bathroom_water_intrusion", "label": "Bathroom Water Intrusion", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "BATH-006" }] },
+        { "key": "toilet_secure", "label": "Toilet Secure", "type": "boolean", "required": false, "suggests": [{ "when": false, "code": "PLMB-007" }] },
+        { "key": "toilet_base_caulking", "label": "Toilet Base Caulking", "type": "score", "required": false },
+        { "key": "sink_condition", "label": "Sink", "type": "score", "required": false },
+        { "key": "sink_drain_gasket_condition", "label": "Sink Drain Gasket", "type": "score", "required": false },
+        { "key": "vanity_condition", "label": "Vanity", "type": "score", "required": false },
+        { "key": "exhaust_fan_operational", "label": "Exhaust Fan Operational", "type": "boolean", "required": false, "suggests": [{ "when": false, "code": "BATH-008" }] }
+      ]
+    },
+    {
+      "id": "bathroom_expanded",
+      "label": "Bathroom Expanded Asset Details",
+      "default_collapsed": true,
+      "fields": [
+        { "key": "shower_manufacturer", "label": "Shower Manufacturer", "type": "text", "required": false, "asset_type": "shower_valve" },
+        { "key": "shower_model", "label": "Shower Model", "type": "text", "required": false, "asset_type": "shower_valve" },
+        { "key": "shower_cartridge_number", "label": "Shower Cartridge Number", "type": "text", "required": false, "asset_type": "shower_valve" },
+        { "key": "shower_valve_type", "label": "Shower Valve Type", "type": "text", "required": false, "asset_type": "shower_valve" },
+        { "key": "missing_tile", "label": "Missing Tile", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "BATH-004" }] },
+        { "key": "loose_tile", "label": "Loose Tile", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "BATH-003" }] },
+        { "key": "toilet_manufacturer", "label": "Toilet Manufacturer", "type": "text", "required": false, "asset_type": "toilet" },
+        { "key": "toilet_model", "label": "Toilet Model", "type": "text", "required": false, "asset_type": "toilet" },
+        { "key": "wax_ring_suspected_failure", "label": "Wax Ring Suspected Failure", "type": "boolean", "required": false, "suggests": [{ "when": true, "code": "PLMB-008" }] },
+        { "key": "sink_manufacturer", "label": "Sink/Faucet Manufacturer", "type": "text", "required": false, "asset_type": "sink_faucet" },
+        { "key": "sink_model", "label": "Sink/Faucet Model", "type": "text", "required": false, "asset_type": "sink_faucet" },
+        { "key": "faucet_type", "label": "Faucet Type", "type": "text", "required": false, "asset_type": "sink_faucet" },
+        { "key": "faucet_cartridge_number", "label": "Faucet Cartridge Number", "type": "text", "required": false, "asset_type": "sink_faucet" },
+        { "key": "drain_assembly_condition", "label": "Drain Assembly", "type": "score", "required": false },
+        { "key": "popup_assembly_working", "label": "Pop-Up Assembly Working", "type": "boolean", "required": false },
+        { "key": "supply_stops_condition", "label": "Supply Stops", "type": "score", "required": false },
+        { "key": "supply_lines_condition", "label": "Supply Lines", "type": "score", "required": false },
+        { "key": "exhaust_fan_manufacturer", "label": "Exhaust Fan Manufacturer", "type": "text", "required": false, "asset_type": "bath_exhaust_fan" },
+        { "key": "exhaust_fan_model", "label": "Exhaust Fan Model", "type": "text", "required": false, "asset_type": "bath_exhaust_fan" }
+      ]
+    },
+    {
+      "id": "electrical_quick",
+      "label": "Electrical Quick Check",
+      "default_collapsed": false,
+      "fields": [
+        { "key": "lights_working", "label": "Lights Working", "type": "boolean", "required": false, "suggests": [{ "when": false, "code": "ELEC-001" }] },
+        { "key": "outlets_condition", "label": "Outlets", "type": "score", "required": false },
+        { "key": "gfci_working", "label": "GFCI Working", "type": "select", "options": ["yes", "no", "unknown"], "required": false, "suggests": [{ "when": "no", "code": "ELEC-003" }] },
+        { "key": "electrical_notes", "label": "Electrical Notes", "type": "textarea", "required": false }
+      ]
+    },
+    {
+      "id": "photos",
+      "label": "Photos",
+      "default_collapsed": false,
+      "repeatable": true,
+      "fields": [
+        { "key": "photo", "label": "Photo", "type": "image", "required": true },
+        { "key": "caption", "label": "Caption", "type": "text", "required": false },
+        { "key": "linked_category", "label": "Linked Category", "type": "select", "options": ["room", "wall", "ceiling", "floor", "mirror", "window", "ptac", "bathroom", "electrical", "deficiency"], "required": false },
+        { "key": "linked_deficiency_code", "label": "Linked Deficiency Code", "type": "text", "required": false }
+      ]
+    },
+    {
+      "id": "cost_estimates",
+      "label": "Cost Estimates",
+      "default_collapsed": false,
+      "fields": [
+        { "key": "paint_estimate", "label": "Paint Estimate", "type": "money", "required": false, "default": 0 },
+        { "key": "ptac_estimate", "label": "PTAC Estimate", "type": "money", "required": false, "default": 0 },
+        { "key": "bathroom_estimate", "label": "Bathroom Estimate", "type": "money", "required": false, "default": 0 },
+        { "key": "flooring_estimate", "label": "Flooring Estimate", "type": "money", "required": false, "default": 0 },
+        { "key": "electrical_estimate", "label": "Electrical Estimate", "type": "money", "required": false, "default": 0 },
+        { "key": "other_estimate", "label": "Other Estimate", "type": "money", "required": false, "default": 0 },
+        { "key": "estimated_total_cost", "label": "Total Estimate", "type": "calculated_money", "formula": "paint_estimate + ptac_estimate + bathroom_estimate + flooring_estimate + electrical_estimate + other_estimate" }
+      ]
+    }
+  ]
+}
